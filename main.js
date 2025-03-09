@@ -4,8 +4,8 @@ let win;
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1366,
+    height: 768,
     fullscreen: true, // Iniciar en fullscreen
     resizable: false, // Bloquear redimensionado
     fullscreenable: false, // Evitar salida de fullscreen con ESC
@@ -15,6 +15,8 @@ function createWindow() {
       devTools: false // ❌ Bloquea DevTools
     }
   });
+
+  win.setFullScreen(true);
 
   win.loadFile('index.html');
 
