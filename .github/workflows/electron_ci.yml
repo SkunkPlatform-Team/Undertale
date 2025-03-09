@@ -1,0 +1,53 @@
+name: Electron CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-package:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install dependencies with check for package-lock.json
+      run: |
+        if (Test-Path package-lock.json) {
+          npm ci
+        } else {
+          npm install --package-lock-only
+          npm ci
+        }
+
+    - name: Build and Package Electron app for Windows
+      run: |
+        npx electron-builder --win --x64 --publish never
+
+    - name: Upload Windows Build
+      uses: actions/upload-artifact@v4
+      with:
+        name: electron-windows-installer
+        path: dist/*.exe
