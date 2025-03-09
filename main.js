@@ -10,12 +10,13 @@ function createWindow() {
     resizable: false, // Bloquear redimensionado
     frame: false, // Ocultar la barra superior
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false, // Desactivar Node.js en la web
       devTools: false // Bloquear DevTools
     }
   });
 
-  win.loadFile('index.html');
+  // Cargar la URL del juego de Sans Fight
+  win.loadURL('https://jcw87.github.io/c2-sans-fight/'); // Reemplaza con la URL real
 
   // 🔹 Minimizar si la app pierde el foco
   win.on('blur', () => win.minimize());
